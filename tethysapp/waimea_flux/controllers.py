@@ -72,3 +72,21 @@ def home(request):
     }
 
     return render(request, 'waimea_flux/home.html', context)
+
+@login_required()
+def background(request):
+    """
+    Controller for the background page.
+    """
+    context = {}
+
+    return render(request,'waimea_flux/About.html',context)
+
+@login_required()
+def background(request):
+    """
+    Controller for the background page.
+    """
+    context = {}
+
+    return render(request,'waimea_flux/Data.html',context)
