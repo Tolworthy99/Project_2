@@ -74,7 +74,7 @@ def home(request):
     return render(request, 'waimea_flux/home.html', context)
 
 @login_required()
-def background(request):
+def About(request):
     """
     Controller for the background page.
     """
@@ -83,7 +83,7 @@ def background(request):
     return render(request,'waimea_flux/About.html',context)
 
 @login_required()
-def background(request):
+def Data(request):
     """
     Controller for the background page.
     """
@@ -92,7 +92,7 @@ def background(request):
     return render(request,'waimea_flux/Data.html',context)
 
 @login_required()
-def background(request):
+def New_Data(request):
     """
     Controller for the background page.
     """
