@@ -13,16 +13,17 @@
 {% block app_title %}{{ tethys_app.name }}{% endblock %}
 
 {% block app_navigation_items %}
+{% url 'waimea_flux:home' as home_url %}
+{% url 'waimea_flux:Data' as Data_url %}
+{% url 'waimea_flux:New_Data' as New_Data_url %}
+{% url 'waimea_flux:About' as About_url %}
+
+
   <li class="title">App Navigation</li>
-  <li class="active"><a href="">Home</a></li>
-  <li><a href="">Jobs</a></li>
-  <li><a href="">Results</a></li>
-  <li class="title">Steps</li>
-  <li><a href="">1. The First Step</a></li>
-  <li><a href="">2. The Second Step</a></li>
-  <li><a href="">3. The Third Step</a></li>
-  <li class="separator"></li>
-  <li><a href="">Get Started</a></li>
+  <li class="{% if request.path == home_url %}active{% endif %}"><a href="{{home_url}}">Home</a></li>
+  <li class="{% if request.path == Data_url %}active{% endif %}"><a href="{{Data_url}}">Data</a></li>
+  <li class="{% if request.path == New_Data_url %}active{% endif %}"><a href="{{New_Data_url}}">Input new Data</a></li>
+  <li class="{% if request.path == About_url %}active{% endif %}"><a href="{{About_url}}">About</a></li>
 {% endblock %}
 
 {% block app_content %}

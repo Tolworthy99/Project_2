@@ -6,7 +6,7 @@ class WaimeaFlux(TethysAppBase):
     Tethys app class for Waimea Flux.
     """
 
-    name = 'Waimea Flux'
+    name = 'Waimea Canyon Data'
     index = 'waimea_flux:home'
     icon = 'waimea_flux/images/icon.gif'
     package = 'waimea_flux'
@@ -29,6 +29,21 @@ class WaimeaFlux(TethysAppBase):
                 url='waimea-flux',
                 controller='waimea_flux.controllers.home'
             ),
+            UrlMap(
+                name='About',
+                url='About',
+                controller='waimea_flux.controllers.About'
+            ),
+            UrlMap(
+                name='Data',
+                url='Data',
+                controller='waimea_flux.controllers.Data'
+            ),
+            UrlMap(
+                name='New_Data',
+                url='New_Data',
+                controller='waimea_flux.controllers.New_Data'
+            )
         )
 
         return url_maps

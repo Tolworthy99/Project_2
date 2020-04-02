@@ -90,3 +90,12 @@ def background(request):
     context = {}
 
     return render(request,'waimea_flux/Data.html',context)
+
+@login_required()
+def background(request):
+    """
+    Controller for the background page.
+    """
+    context = {}
+
+    return render(request,'waimea_flux/New_Data.html',context)
