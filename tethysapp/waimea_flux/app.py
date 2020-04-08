@@ -40,6 +40,11 @@ class WaimeaFlux(TethysAppBase):
                 controller='waimea_flux.controllers.Data'
             ),
             UrlMap(
+                name='Geolmap',
+                url='Geolmap',
+                controller='waimea_flux.controllers.Geolmap'
+            ),
+            UrlMap(
                 name='New_Data',
                 url='New_Data',
                 controller='waimea_flux.controllers.New_Data'

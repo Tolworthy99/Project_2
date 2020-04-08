@@ -99,3 +99,12 @@ def New_Data(request):
     context = {}
 
     return render(request,'waimea_flux/New_Data.html',context)
+
+@login_required()
+def Geolmap(request):
+    """
+    Controller for the background page.
+    """
+    context = {}
+
+    return render(request,'waimea_flux/Geolmap.html',context)
