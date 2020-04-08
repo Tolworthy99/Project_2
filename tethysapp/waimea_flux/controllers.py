@@ -108,3 +108,11 @@ def Geolmap(request):
     context = {}
 
     return render(request,'waimea_flux/Geolmap.html',context)
+@login_required()
+def Othermap(request):
+    """
+    Controller for the background page.
+    """
+    context = {}
+
+    return render(request,'waimea_flux/Othermap.html',context)

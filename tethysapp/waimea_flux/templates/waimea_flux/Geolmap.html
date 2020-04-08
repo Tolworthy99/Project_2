@@ -9,6 +9,187 @@
 
 {% block app_content %}
   <h1>Geologic Map of Kauai</h1>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+     crossorigin=""/>
+     <style media="screen">
+       body{
+         font-family: Yatra One;
+         text-align: center;
+         background-image: url("Images/Bay.jpeg");
+         background-size: cover;
+       }
+
+       h6{
+         font-size: 20px;
+       }
+
+
+       #map2 {
+        margin: auto;
+        height: 600px;
+        width: 1000px;
+       }
+
+        .info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        }
+
+        .info h4 {
+        margin: 0 0 5px;
+        color: #777;
+        }
+        .legend {
+        line-height: 18px;
+        color: #555;
+        }
+        .legend i {
+        width: 18px;
+        height: 18px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+        }
+     </style>
+    </head>
+    <body>
+      <div class=title>
+        <h1>Map of Data</h1>
+
+
+      <br>
+      <div id="map2"></div>
+      <div class="Sources">
+
+      </div>
+      <script type="text/javascript" src="geolmap.js"></script>
+      <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin=""></script>
+      <script>
+
+        var geolMap = L.map('map2').setView([22.063177, -159.501938], 11);
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/light-v9',
+            accessToken: 'pk.eyJ1IjoidG9sd29ydGh5MSIsImEiOiJjazZsYmV5a2gwZDlzM2xueTRiOHNscGoxIn0.aJB5chRIixiPuc-kkmaP7g'
+        }).addTo(geolMap);
+
+        L.geoJSON(geolUnits).addTo(geolMap);
+
+        function getColor(d) {
+          return d == 'Waimea Canyon Basalt' ? '#ff0938' :
+            d == 'Beach deposits'  ? '#f9f653' :
+            d == 'Fill'  ? '#ded5c3' :
+            d == 'Koloa Volcanics'  ? '#550302' :
+            d == 'Open water'   ? '#240fde' :
+            d == 'Older dune deposits'  ? '#93880b' :
+            d == 'Younger dune deposits'   ? '#Ff3b13' :
+            d == 'Older alluvium'   ? '#938e82' :
+            d == 'Alluvium'   ? '#494640' :
+            d == 'Lagoon deposits'   ? '#120871' :
+                       '#FFEDA0';
+           }
+
+
+        function style(feature) {
+          return {
+          fillColor: getColor(feature.properties.name),
+          weight: 2,
+          opacity: 1,
+          color: 'white',
+          dashArray: '3',
+          fillOpacity: 0.7
+      };
+      }
+
+      var geojson;
+      function highlightFeature(e) {
+      var layer = e.target;
+
+      layer.setStyle({
+          weight: 5,
+          color: '#666',
+          dashArray: '',
+          fillOpacity: 0.7
+      });
+
+      if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          layer.bringToFront();
+      }
+      info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+      geojson.resetStyle(e.target);
+      info.update();
+      }
+
+      function zoomToFeature(e) {
+      map.fitBounds(e.target.getBounds());
+      }
+
+      function onEachFeature(feature, layer) {
+      layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
+          click: zoomToFeature
+      });
+      }
+
+      geojson = L.geoJson(geolUnits, {
+      style: style,
+      onEachFeature: onEachFeature
+      }).addTo(geolMap);
+
+      var info = L.control();
+
+      info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      this.update();
+      return this._div;
+      };
+
+      // method that we will use to update the control based on feature properties passed
+      info.update = function (props) {
+      this._div.innerHTML = '<h4>Geologic Unit</h4>' +  (props ?
+      '<b>' + props.name + '</b><br />' + props.rock_type + '</b><br />'  + props.age_range
+      : 'Hover over unit');
+      };
+
+      info.addTo(geolMap);
+
+      var legend = L.control({position: 'bottomright'});
+
+      legend.onAdd = function (map) {
+
+          var div = L.DomUtil.create('div', 'info legend'),
+              grades = ['Waimea Canyon Basalt','Beach deposits','Fill','Koloa Volcanics','Open water','Older dune deposits','Younger dune deposits','Older alluvium','Alluvium','Lagoon deposits'];
+              labels = [];
+
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getColor(grades[i]) + '"></i> ' +
+              grades[i] + (grades[i + 1] ? '&ndash;' +  '<br>' : '+');
+      }
+
+      return div;
+      };
+
+      legend.addTo(geolMap);
+
+
+      </script>
+    </body>
+  </html>
 
 {% endblock %}
 

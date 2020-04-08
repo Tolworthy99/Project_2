@@ -18,6 +18,7 @@
 {% url 'waimea_flux:New_Data' as New_Data_url %}
 {% url 'waimea_flux:About' as About_url %}
 {% url 'waimea_flux:Geolmap' as Gmap_url %}
+{% url 'waimea_flux:Othermap' as other_url %}
 
 
   <li class="title">App Navigation</li>
@@ -26,6 +27,7 @@
   <li class="{% if request.path == New_Data_url %}active{% endif %}"><a href="{{New_Data_url}}">Input new Data</a></li>
   <li class="{% if request.path == About_url %}active{% endif %}"><a href="{{About_url}}">About</a></li>
   <li class="{% if request.path == Gmap_url %}active{% endif %}"><a href="{{Gmap_url}}">Geologic Map of Kauai</a></li>
+  <li class="{% if request.path == other_url %}active{% endif %}"><a href="{{other_url}}">Map of Kauai with Data</a></li>
 {% endblock %}
 
 {% block app_content %}

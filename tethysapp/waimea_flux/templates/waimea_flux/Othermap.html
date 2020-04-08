@@ -1,0 +1,123 @@
+{% extends "waimea_flux/base.html" %}
+{% load tethys_gizmos %}
+
+{% block header_buttons %}
+  <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
+    <a data-toggle="modal" data-target="#help-modal"><span class="glyphicon glyphicon-question-sign"></span></a>
+  </div>
+{% endblock %}
+
+{% block app_content %}
+  <h1>Important Data of Kauai</h1>
+  <!DOCTYPE html>
+  <html lang="en" dir="ltr">
+    <head>
+      <meta charset="utf-8">
+      <title>Places to See</title>
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+     integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+     crossorigin=""/>
+     <style media="screen">
+       body{
+         font-family: Yatra One;
+         text-align: center;
+         background-image: url("Images/Bay.jpeg");
+         background-size: cover;
+       }
+
+       h6{
+         font-size: 20px;
+       }
+       #mapid {
+        margin: auto;
+        height: 600px;
+        width: 1000px;
+       }
+     </style>
+    </head>
+    <body>
+      <div class=title>
+        <h1>Map of Data</h1>
+
+      <div>
+      <div id="mapid"></div>
+      <br>
+      <div class="Sources">
+        <h4>Sources for Data</h4>
+        <p>Giambelluca, T.W., Q. Chen, A.G. Frazier, J.P. Price, Y.-L. Chen, P.-S. Chu, J.K. Eischeid, and D.M. Delparte, 2013: Online Rainfall Atlas of Hawai‘i. Bull. Amer. Meteor. Soc. 94, 313-316, doi: 10.1175/BAMS-D-11-00228.1.</p>
+        <p>Giambelluca, T.W., X. Shuai, M.L. Barnes, R.J. Alliss, R.J. Longman, T. Miura, Q. Chen, A.G. Frazier, R.G. Mudd, L. Cuo, and A.D. Businger. 2014. Evapotranspiration of Hawai‘i. Final report submitted to the U.S. Army Corps of Engineers—Honolulu District, and the Commission on Water Resource Management, State of Hawai‘i.</p>
+      </div>
+      <script type="text/javascript" src="geolmap.js"></script>
+      <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+      integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+      crossorigin=""></script>
+      <script>
+        //Map of different parts of my home time
+        var mymap = L.map('mapid').setView([22.063177, -159.501938], 11);
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            accessToken: 'pk.eyJ1IjoidG9sd29ydGh5MSIsImEiOiJjazZsYmV5a2gwZDlzM2xueTRiOHNscGoxIn0.aJB5chRIixiPuc-kkmaP7g'
+        }).addTo(mymap);
+
+        var shapefiles = {
+          'Kauai DEM': L.tileLayer.wms('https://geoserver.hydroshare.org/geoserver/HS-bc69c70dc6ec4b668efbebcf0c763d30/wms',{
+          layers: 'Kauai kauai_dem_Clip',
+          format: 'image/png',
+          transparent: true,
+        }),
+
+          'Watershed Boundaries': L.tileLayer.wms('https://geoserver.hydroshare.org/geoserver/HS-c494b4543c6f4b7fbd42c7e79467fcd5/wms',{
+          layers: 'WaimeaWatershed',
+          format: 'image/png',
+          transparent: true,
+        }),
+
+          'Geology': L.tileLayer.wms('https://geoserver.hydroshare.org/geoserver/HS-bc69c70dc6ec4b668efbebcf0c763d30/wms',{
+          layers: 'Kauai Geology',
+          format: 'image/png',
+          transparent: true,
+        }),
+
+          'Both Layers': L.tileLayer.wms('https://geoserver.hydroshare.org/geoserver/HS-6714073776aa4de3b47a6d09084c3dd3/wms',{
+          layers: 'Kauai kauai_dem_Clip,CEEN514_Assignment_8 Cities_to_visit',
+          format: 'image/png',
+          transparent: true,
+        })
+        }
+
+
+        L.control.layers(shapefiles).addTo(mymap);
+
+        </script>
+
+{% endblock %}
+
+{# Use the after_app_content block for modals #}
+{% block after_app_content %}
+  <!-- Example Modal -->
+  <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-labelledby="help-modal-label">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h5 class="modal-title" id="help-modal-label">Example Modal</h5>
+        </div>
+        <div class="modal-body">
+          <p>You can add custom buttons to the app header using the <code>header_buttons</code> block. Use anchor/link tags for the button and wrap it in a div with the class <code>header-button</code>. For buttons with the gliphyicons, add the <code>glyphicon-button</code> class as well.</p>
+          <p>Ever have trouble using a modal in a Tethys app? Use the <code>after_app_content</code> block for modal content to allow them to function properly. See: <a href="https://getbootstrap.com/javascript/#modals">Bootstrap Modals</a></p>
+          <p>Add tooltips to any element by adding the <code>data-toggle</code>, <code>data-placement</code>, and <code>title</code> attributes to the button. See: <a href="https://getbootstrap.com/javascript/#tooltips">Bootstrap Tooltips</a></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block app_actions %}
+{% endblock %}
