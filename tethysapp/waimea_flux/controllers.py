@@ -92,28 +92,28 @@ def Data(request, app_workspace):
     Controller for the background page.
     """
 
-        dams = get_all_dams(app_workspace.path)
-        table_rows = []
+    dams = get_all_dams(app_workspace.path)
+    table_rows = []
 
-        for dam in dams:
-            table_rows.append(
-                (
-                    dam['name'], dam['owner'],
-                    dam['river'], dam['date_built']
-                )
+    for dam in dams:
+        table_rows.append(
+            (
+                dam['name'], dam['owner'],
+                dam['river'], dam['date_built']
             )
-
-        dams_table = DataTableView(
-            column_names=('Name', 'Owner', 'River', 'Date Built'),
-            rows=table_rows,
-            searching=False,
-            orderClasses=False,
-            lengthMenu=[ [10, 25, 50, -1], [10, 25, 50, "All"] ],
         )
 
-        context = {
-            'dams_table': dams_table
-        }
+    dams_table = DataTableView(
+        column_names=('Name', 'Owner', 'River', 'Date Built'),
+        rows=table_rows,
+        searching=False,
+        orderClasses=False,
+        lengthMenu=[ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+    )
+
+    context = {
+        'dams_table': dams_table
+    }
 
     return render(request,'waimea_flux/Data.html',context)
 
