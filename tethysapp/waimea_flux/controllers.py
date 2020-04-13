@@ -3,6 +3,8 @@ from django.contrib import messages
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
 from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput
+from .model import add_new_dam
+from tethys_sdk.workspaces import app_workspace
 
 @login_required()
 def home(request):
@@ -139,6 +141,7 @@ def New_Data(request):
 
         if not has_errors:
             # Do stuff here
+            add_new_dam(db_directory=app_workspace.path, name=name, owner=owner, river=river, date_built=date_built)
             return redirect(reverse('waimea_flux:home'))
 
         messages.error(request, "Please fix errors.")
