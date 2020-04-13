@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from djangi.contrib import messages
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
 from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput
@@ -140,7 +141,7 @@ def New_Data(request):
     cancel_button = Button(
         display_text='Cancel',
         name='cancel-button',
-        href=reverse('dam_inventory:home')
+        href=reverse('waimea_flux:home')
     )
 
     context = {
@@ -151,7 +152,7 @@ def New_Data(request):
         'add_button': add_button,
         'cancel_button': cancel_button,
     }
-    
+
     return render(request,'waimea_flux/New_Data.html',context)
 
 @login_required()
