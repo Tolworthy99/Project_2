@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
-from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput
-from .model import add_new_dam
+from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView
+from .model import add_new_dam, get_all_dams
 from tethys_sdk.workspaces import app_workspace
 
 @login_required()
@@ -87,13 +87,36 @@ def About(request):
     return render(request,'waimea_flux/About.html',context)
 
 @login_required()
-def Data(request):
+def Data(request, app_workspace):
     """
     Controller for the background page.
     """
-    context = {}
+
+        dams = get_all_dams(app_workspace.path)
+        table_rows = []
+
+        for dam in dams:
+            table_rows.append(
+                (
+                    dam['name'], dam['owner'],
+                    dam['river'], dam['date_built']
+                )
+            )
+
+        dams_table = DataTableView(
+            column_names=('Name', 'Owner', 'River', 'Date Built'),
+            rows=table_rows,
+            searching=False,
+            orderClasses=False,
+            lengthMenu=[ [10, 25, 50, -1], [10, 25, 50, "All"] ],
+        )
+
+        context = {
+            'dams_table': dams_table
+        }
 
     return render(request,'waimea_flux/Data.html',context)
+
 
 @login_required()
 def New_Data(request):

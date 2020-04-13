@@ -32,3 +32,28 @@ def add_new_dam(db_directory, name, owner, river, date_built):
     # Write json
     with open(file_path, 'w') as f:
         f.write(dam_json)
+
+def get_all_dams(db_directory):
+    """
+    Get all persisted dams.
+    """
+    # Write to file in {{db_directory}}/dams/{{uuid}}.json
+    # Make dams dir if it doesn't exist
+    dams_dir = os.path.join(db_directory, 'dams')
+    if not os.path.exists(dams_dir):
+        os.mkdir(dams_dir)
+
+    dams = []
+
+    # Open each file and convert contents to python objects
+    for dam_json in os.listdir(dams_dir):
+        # Make sure we are only looking at json files
+        if '.json' not in dam_json:
+            continue
+
+        dam_json_path = os.path.join(dams_dir, dam_json)
+        with open(dam_json_path, 'r') as f:
+            dam_dict = json.loads(f.readlines()[0])
+            dams.append(dam_dict)
+
+    return dams
