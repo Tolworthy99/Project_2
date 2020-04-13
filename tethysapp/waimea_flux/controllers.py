@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
