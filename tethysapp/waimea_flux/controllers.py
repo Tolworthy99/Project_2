@@ -112,7 +112,7 @@ def New_Data(request):
     date_error = ''
 
     #handle form submission
-    if request.POST and 'add-button' on request.POST:
+    if request.POST and 'add-button' in request.POST:
         #Get Values
         has_erros = False
         name = request.POST.get('name',None)
