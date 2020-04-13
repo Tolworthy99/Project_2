@@ -101,7 +101,7 @@ def New_Data(request):
 
     # Default Values
     name = ''
-    owner= 'Reclamation'
+    owner = 'Reclamation'
     river = ''
     date_built = ''
 
@@ -111,42 +111,41 @@ def New_Data(request):
     river_error = ''
     date_error = ''
 
-    #handle form submission
     if request.POST and 'add-button' in request.POST:
-        #Get Values
-        has_erros = False
-        name = request.POST.get('name',None)
-        owner = request.POST.get('owner',None)
-        river = request.POST.get('river',None)
-        date_built = request.POST.get('date-built',None)
+        # Get values
+        has_errors = False
+        name = request.POST.get('name', None)
+        owner = request.POST.get('owner', None)
+        river = request.POST.get('river', None)
+        date_built = request.POST.get('date-built', None)
 
-        #validate
+        # Validate
         if not name:
-                has_errors = True
-                name_error = 'Name is required.'
+            has_errors = True
+            name_error = 'Name is required.'
 
         if not owner:
-                has_errors = True
-                owner_error = 'Owner is required.'
+            has_errors = True
+            owner_error = 'Owner is required.'
 
         if not river:
-                has_errors = True
-                river_error = 'River is required.'
+            has_errors = True
+            river_error = 'River is required.'
 
         if not date_built:
-                has_errors = True
-                date_error = 'Date Built is required.'
+            has_errors = True
+            date_error = 'Date Built is required.'
 
         if not has_errors:
-                # Do stuff here
-                return redirect(reverse('waimea_flux:home'))
+            # Do stuff here
+            return redirect(reverse('waimea_flux:home'))
 
         messages.error(request, "Please fix errors.")
 
     # Define form gizmos
     name_input = TextInput(
         display_text='Name',
-        name='name'
+        name='name',
         initial=name,
         error=name_error
     )
@@ -163,7 +162,7 @@ def New_Data(request):
     river_input = TextInput(
         display_text='River',
         name='river',
-        placeholder='e.g.: Mississippi River'
+        placeholder='e.g.: Mississippi River',
         initial=river,
         error=river_error
     )
@@ -177,7 +176,6 @@ def New_Data(request):
         today_button=True,
         initial=date_built,
         error=date_error
-    )
 
     add_button = Button(
         display_text='Add',
@@ -204,6 +202,7 @@ def New_Data(request):
     }
 
     return render(request,'waimea_flux/New_Data.html',context)
+
 
 @login_required()
 def Geolmap(request):
