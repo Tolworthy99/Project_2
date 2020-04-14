@@ -86,7 +86,7 @@ def About(request):
 
     return render(request,'waimea_flux/About.html',context)
 
-@app_workspace 
+@app_workspace
 @login_required()
 def Data(request, app_workspace):
     """
@@ -118,7 +118,7 @@ def Data(request, app_workspace):
 
     return render(request,'waimea_flux/Data.html',context)
 
-
+@app_workspace
 @login_required()
 def New_Data(request):
     """
