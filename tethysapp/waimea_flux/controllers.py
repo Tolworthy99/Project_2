@@ -120,7 +120,7 @@ def Data(request, app_workspace):
 
 @app_workspace
 @login_required()
-def New_Data(request):
+def New_Data(request, app_workspace):
     """
     Controller for New Data page.
     """
