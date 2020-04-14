@@ -94,7 +94,7 @@ def home(request, app_workspace):
         name='add-dam-button',
         icon='glyphicon glyphicon-plus',
         style='success',
-        href=reverse('dam_inventory:add_dam')
+        href=reverse('waimea_flux:Data')
     )
 
 
