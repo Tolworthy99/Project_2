@@ -221,7 +221,7 @@ def New_Data(request, app_workspace):
 
     drawing_options = MVDraw(
         controls=['Modify', 'Delete', 'Move', 'Point'],
-        intial='Point',
+        initial='Point',
         output_format='GeoJSON',
         point_color='#FF0000'
     )
