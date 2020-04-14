@@ -118,8 +118,8 @@ def New_Data(request):
     )
 
     datecol_input = DatePicker(
-        name='date-built',
-        display_text='Date Built',
+        name='datecol',
+        display_text='Date Collected',
         autoclose=True,
         format='MM d, yyyy',
         start_view='decade',
@@ -209,7 +209,7 @@ def New_Data(request):
     )
 
     context = {
-        'name_input': name_input,
+        'sampleid_input': sampleid_input,
         'river_input': river_input,
         'datecol_input': datecol_input,
         'timecol':timecol_input,
