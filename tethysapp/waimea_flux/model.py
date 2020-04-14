@@ -7,6 +7,10 @@ def add_new_dam(db_directory, location, name, owner, river, date_built):
     """
     Persist new dam.
     """
+
+    #convert GeoJSON to Python dictionary
+    location_dict = json.loads(location)
+    
     # Serialize data to json
     new_dam_id = uuid.uuid4()
     dam_dict = {
