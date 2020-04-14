@@ -205,7 +205,7 @@ def New_Data(request):
     cancel_button = Button(
         display_text='Cancel',
         name='cancel-button',
-        href=reverse('dam_inventory:home')
+        href=reverse('waimea_flux:home')
     )
 
     context = {
