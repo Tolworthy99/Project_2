@@ -212,7 +212,7 @@ def New_Data(request):
         'sampleid_input': sampleid_input,
         'river_input': river_input,
         'datecol_input': datecol_input,
-        'timecol':timecol_input,
+        'timecol_input':timecol_input,
         'note_input': note_input,
         'pH_input': pH_input,
         'temper_input': temper_input,
