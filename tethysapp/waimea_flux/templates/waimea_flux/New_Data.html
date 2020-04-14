@@ -9,18 +9,30 @@
 
 {% block app_content %}
   <h1>New Data</h1>
-
-  <form id="add-dam-form" method="post">
+  <form id="add-sample-form" method="post">
     {% csrf_token %}
-    <div class="form-group{% if location_error %}has-error{% endif %}">
-      <label class="control-label">Location</label>
-      {% gizmo location_input %}
-      {% if location_error %}<p class="help-block">{{location_error}}</p>{% endif %}
-    </div>
-    {% gizmo name_input %}
-    {% gizmo owner_input %}
+    {% gizmo sampleid_input %}
     {% gizmo river_input %}
-    {% gizmo date_built_input %}
+    {% gizmo datecol_input %}
+    {% gizmo timecol_input %}
+    {% gizmo note_input%}
+    <h3>Chemistry</h3>
+    {% gizmo pH_input %}
+    {% gizmo temper_input %}
+    {% gizmo cond_input %}
+    <h4>Cations</h4>
+    {% gizmo ca_input %}
+    {% gizmo mg_input %}
+    {% gizmo na_input %}
+    {% gizmo k_input %}
+    <h4>Anions</h4>
+    {% gizmo hco_input %}
+    {% gizmo cl_input %}
+    {% gizmo so_input %}
+    <h4>Other</h4>
+    {% gizmo sio_input %}
+
+
   </form>
 
 {% endblock %}

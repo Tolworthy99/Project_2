@@ -53,6 +53,11 @@ class WaimeaFlux(TethysAppBase):
                 name='New_Data',
                 url='New_Data',
                 controller='waimea_flux.controllers.New_Data'
+            ),
+            UrlMap(
+                name='Datamap',
+                url='Datamap',
+                controller='waimea_flux.controllers.Datamap'
             )
         )
 

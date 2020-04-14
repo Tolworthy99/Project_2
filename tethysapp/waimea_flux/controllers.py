@@ -2,100 +2,15 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
-from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVView, MapView, MVLayer
+from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVView, MapView, MVLayer, RangeSlider
 from .model import add_new_dam, get_all_dams
 from tethys_sdk.workspaces import app_workspace
 
-@app_workspace
 @login_required()
-def home(request, app_workspace):
+def home(request):
     """
     Controller for the app home page.
     """
-    # Get list of dams and create dams MVLayer:
-    dams = get_all_dams(app_workspace.path)
-    features = []
-    lat_list = []
-    lng_list = []
-
-    # Define GeoJSON Features
-    for dam in dams:
-        dam_location = dam.pop('location')
-        lat_list.append(dam_location['coordinates'][1])
-        lng_list.append(dam_location['coordinates'][0])
-
-        dam_feature = {
-            'type': 'Feature',
-            'geometry': {
-                'type': dam_location['type'],
-                'coordinates': dam_location['coordinates'],
-            }
-        }
-
-        features.append(dam_feature)
-
-    # Define GeoJSON FeatureCollection
-    dams_feature_collection = {
-        'type': 'FeatureCollection',
-        'crs': {
-            'type': 'name',
-            'properties': {
-                'name': 'EPSG:4326'
-            }
-        },
-        'features': features
-    }
-
-    style = {'ol.style.Style': {
-        'image': {'ol.style.Circle': {
-            'radius': 10,
-            'fill': {'ol.style.Fill': {
-                'color':  '#d84e1f'
-            }},
-            'stroke': {'ol.style.Stroke': {
-                'color': '#ffffff',
-                'width': 1
-            }}
-        }}
-    }}
-
-    # Create a Map View Layer
-    dams_layer = MVLayer(
-        source='GeoJSON',
-        options=dams_feature_collection,
-        legend_title='Dams',
-        layer_options={'style': style}
-    )
-
-    # Define view centered on dam locations
-    try:
-        view_center = [sum(lng_list) / float(len(lng_list)), sum(lat_list) / float(len(lat_list))]
-    except ZeroDivisionError:
-        view_center = [-98.6, 39.8]
-
-    view_options = MVView(
-        projection='EPSG:4326',
-        center=view_center,
-        zoom=4.5,
-        maxZoom=18,
-        minZoom=2
-    )
-
-    dam_inventory_map = MapView(
-        height='100%',
-        width='100%',
-        layers=[dams_layer],
-        basemap='OpenStreetMap',
-        view=view_options
-    )
-
-    add_dam_button = Button(
-        display_text='Add Dam',
-        name='add-dam-button',
-        icon='glyphicon glyphicon-plus',
-        style='success',
-        href=reverse('waimea_flux:Data')
-    )
 
 
     save_button = Button(
@@ -159,9 +74,7 @@ def home(request, app_workspace):
         'edit_button': edit_button,
         'remove_button': remove_button,
         'previous_button': previous_button,
-        'next_button': next_button,
-        'dam_inventory_map': dam_inventory_map,
-        'add_dam_button': add_dam_button
+        'next_button': next_button
     }
 
     return render(request, 'waimea_flux/home.html', context)
@@ -175,153 +88,111 @@ def About(request):
 
     return render(request,'waimea_flux/About.html',context)
 
-@app_workspace
+
 @login_required()
-def Data(request, app_workspace):
+def Data(request):
     """
     Controller for the background page.
     """
 
-    dams = get_all_dams(app_workspace.path)
-    table_rows = []
-
-    for dam in dams:
-        table_rows.append(
-            (
-                dam['name'], dam['owner'],
-                dam['river'], dam['date_built']
-            )
-        )
-
-    dams_table = DataTableView(
-        column_names=('Name', 'Owner', 'River', 'Date Built'),
-        rows=table_rows,
-        searching=False,
-        orderClasses=False,
-        lengthMenu=[ [10, 25, 50, -1], [10, 25, 50, "All"] ],
-    )
-
-    context = {
-        'dams_table': dams_table
-    }
+    context = {}
 
     return render(request,'waimea_flux/Data.html',context)
 
-@app_workspace
+
 @login_required()
-def New_Data(request, app_workspace):
+def New_Data(request):
     """
     Controller for New Data page.
     """
 
-    # Default Values
-    name = ''
-    owner = 'Reclamation'
-    river = ''
-    date_built = ''
-    location = ''
-
-    # Errors
-    name_error = ''
-    owner_error = ''
-    river_error = ''
-    date_error = ''
-    location_error = ''
-
-    # Handle form submission
-    if request.POST and 'add-button' in request.POST:
-        # Get values
-        has_errors = False
-        name = request.POST.get('name', None)
-        owner = request.POST.get('owner', None)
-        river = request.POST.get('river', None)
-        date_built = request.POST.get('date-built', None)
-        location = request.POST.get('geometry', None)
-
-        # Validate
-        if not name:
-            has_errors = True
-            name_error = 'Name is required.'
-
-        if not owner:
-            has_errors = True
-            owner_error = 'Owner is required.'
-
-        if not river:
-            has_errors = True
-            river_error = 'River is required.'
-
-        if not date_built:
-            has_errors = True
-            date_error = 'Date Built is required.'
-
-        if not location:
-            has_errors = True
-            date_error = 'Location is required.'
-
-        if not has_errors:
-            # Do stuff here
-            add_new_dam(db_directory=app_workspace.path, location=location, name=name, owner=owner, river=river, date_built=date_built)
-            return redirect(reverse('waimea_flux:home'))
-
-        messages.error(request, "Please fix errors.")
-
     # Define form gizmos
-    name_input = TextInput(
-        display_text='Name',
-        name='name',
-        initial=name,
-        error=name_error
-    )
-
-    owner_input = SelectInput(
-        display_text='Owner',
-        name='owner',
-        multiple=False,
-        options=[('Reclamation', 'Reclamation'), ('Army Corp', 'Army Corp'), ('Other', 'Other')],
-        initial=owner,
-        error=owner_error
+    sampleid_input = TextInput(
+        display_text='Sample ID',
+        name='sampleid'
     )
 
     river_input = TextInput(
         display_text='River',
         name='river',
-        placeholder='e.g.: Mississippi River',
-        initial=river,
-        error=river_error
+        placeholder='e.g.: Waimea River'
     )
 
-    date_built = DatePicker(
+    datecol_input = DatePicker(
         name='date-built',
         display_text='Date Built',
         autoclose=True,
         format='MM d, yyyy',
         start_view='decade',
         today_button=True,
-        initial=date_built,
-        error=date_error
+        initial='February 15, 2017'
     )
 
-    initial_view = MVView(
-        projection='EPSG:4326',
-        center = [-98.6, 39.8],
-        zoom = 3.5
+    timecol_input = TextInput(
+        display_text='Time of Sample Collection',
+        name='timecol'
     )
 
-    drawing_options = MVDraw(
-        controls=['Modify', 'Delete', 'Move', 'Point'],
-        initial='Point',
-        output_format='GeoJSON',
-        point_color='#FF0000'
+    note_input = TextInput(
+        display_text='Any Notes?',
+        name='note'
     )
 
-    location_input = MapView(
-        height = '300px',
-        width = '100%',
-        basemap = 'OpenStreetMap',
-        draw=drawing_options,
-        view=initial_view
+    pH_input = TextInput(
+        display_text='pH',
+        name='pH'
     )
+
+    temper_input = TextInput(
+        display_text='Temperature',
+        name='temper'
+    )
+
+    cond_input = TextInput(
+        display_text='Conductivity',
+        name='cond'
+    )
+
+    ca_input = TextInput(
+        display_text='Ca<sup>2+</sup>',
+        name='ca'
+    )
+
+    mg_input = TextInput(
+        display_text='Mg<sup>2+</sup>',
+        name='mg'
+    )
+
+    na_input = TextInput(
+        display_text='Na<sup>+</sup>',
+        name='na'
+    )
+
+    k_input = TextInput(
+        display_text='K<sup>+</sup>',
+        name='k'
+    )
+
+    hco_input = TextInput(
+        display_text='HCO<sub>3<sup>-</sup>',
+        name='hco'
+    )
+
+    cl_input = TextInput(
+        display_text='Cl<sup>-</sup>',
+        name='cl'
+    )
+
+    so_input = TextInput(
+        display_text='SO<sub>4</sub><sup>2-</sup>',
+        name='so'
+    )
+
+    sio_input = TextInput(
+        display_text='SiO<sub>2</sub>',
+        name='sio'
+    )
+
 
     add_button = Button(
         display_text='Add',
@@ -335,16 +206,26 @@ def New_Data(request, app_workspace):
     cancel_button = Button(
         display_text='Cancel',
         name='cancel-button',
-        href=reverse('waimea_flux:home')
+        href=reverse('dam_inventory:home')
     )
 
     context = {
         'name_input': name_input,
-        'owner_input': owner_input,
         'river_input': river_input,
-        'date_built_input': date_built,
-        'location_input':location_input,
-        'location_error':location_error,
+        'datecol_input': datecol_input,
+        'timecol':timecol_input,
+        'note_input': note_input,
+        'pH_input': pH_input,
+        'temper_input': temper_input,
+        'cond_input': cond_input,
+        'ca_input': ca_input,
+        'mg_input': mg_input,
+        'na_input': na_input,
+        'k_input': k_input,
+        'hco_input': hco_input,
+        'cl_input': cl_input,
+        'so_input': so_input,
+        'sio_input': sio_input,
         'add_button': add_button,
         'cancel_button': cancel_button,
     }
@@ -359,6 +240,7 @@ def Geolmap(request):
     context = {}
 
     return render(request,'waimea_flux/Geolmap.html',context)
+
 @login_required()
 def Othermap(request):
     """
@@ -367,3 +249,12 @@ def Othermap(request):
     context = {}
 
     return render(request,'waimea_flux/Othermap.html',context)
+
+@login_required()
+def Datamap(request):
+    """
+    Controller for the background page.
+    """
+    context = {}
+
+    return render(request,'waimea_flux/Datamap.html',context)

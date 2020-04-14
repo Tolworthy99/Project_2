@@ -1,5 +1,6 @@
 {% extends "waimea_flux/base.html" %}
 {% load tethys_gizmos %}
+{% load static %}
 
 {% block header_buttons %}
   <div class="header-button glyphicon-button" data-toggle="tooltip" data-placement="bottom" title="Help">
@@ -8,8 +9,9 @@
 {% endblock %}
 
 {% block app_content %}
-  <h1>The Data</h1>
+<h1>Map of Data</h1>
 
+{% gizmo dam_inventory_map %}
 {% endblock %}
 
 {# Use the after_app_content block for modals #}
