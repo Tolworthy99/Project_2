@@ -2,15 +2,102 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib import messages
 from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
-from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVView, MapView
+from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVView, MapView, MVLayer
 from .model import add_new_dam, get_all_dams
 from tethys_sdk.workspaces import app_workspace
 
+@app_workspace
 @login_required()
-def home(request):
+def home(request, app_workspace):
     """
     Controller for the app home page.
     """
+    # Get list of dams and create dams MVLayer:
+    dams = get_all_dams(app_workspace.path)
+    features = []
+    lat_list = []
+    lng_list = []
+
+    # Define GeoJSON Features
+    for dam in dams:
+        dam_location = dam.pop('location')
+        lat_list.append(dam_location['coordinates'][1])
+        lng_list.append(dam_location['coordinates'][0])
+
+        dam_feature = {
+            'type': 'Feature',
+            'geometry': {
+                'type': dam_location['type'],
+                'coordinates': dam_location['coordinates'],
+            }
+        }
+
+        features.append(dam_feature)
+
+    # Define GeoJSON FeatureCollection
+    dams_feature_collection = {
+        'type': 'FeatureCollection',
+        'crs': {
+            'type': 'name',
+            'properties': {
+                'name': 'EPSG:4326'
+            }
+        },
+        'features': features
+    }
+
+    style = {'ol.style.Style': {
+        'image': {'ol.style.Circle': {
+            'radius': 10,
+            'fill': {'ol.style.Fill': {
+                'color':  '#d84e1f'
+            }},
+            'stroke': {'ol.style.Stroke': {
+                'color': '#ffffff',
+                'width': 1
+            }}
+        }}
+    }}
+
+    # Create a Map View Layer
+    dams_layer = MVLayer(
+        source='GeoJSON',
+        options=dams_feature_collection,
+        legend_title='Dams',
+        layer_options={'style': style}
+    )
+
+    # Define view centered on dam locations
+    try:
+        view_center = [sum(lng_list) / float(len(lng_list)), sum(lat_list) / float(len(lat_list))]
+    except ZeroDivisionError:
+        view_center = [-98.6, 39.8]
+
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=4.5,
+        maxZoom=18,
+        minZoom=2
+    )
+
+    dam_inventory_map = MapView(
+        height='100%',
+        width='100%',
+        layers=[dams_layer],
+        basemap='OpenStreetMap',
+        view=view_options
+    )
+
+    add_dam_button = Button(
+        display_text='Add Dam',
+        name='add-dam-button',
+        icon='glyphicon glyphicon-plus',
+        style='success',
+        href=reverse('dam_inventory:add_dam')
+    )
+
+
     save_button = Button(
         display_text='',
         name='save-button',
@@ -72,7 +159,9 @@ def home(request):
         'edit_button': edit_button,
         'remove_button': remove_button,
         'previous_button': previous_button,
-        'next_button': next_button
+        'next_button': next_button,
+        'dam_inventory_map': dam_inventory_map,
+        'add_dam_button': add_dam_button
     }
 
     return render(request, 'waimea_flux/home.html', context)
