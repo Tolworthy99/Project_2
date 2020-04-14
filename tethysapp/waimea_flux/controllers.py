@@ -153,42 +153,42 @@ def New_Data(request):
     )
 
     ca_input = TextInput(
-        display_text='Ca<sup>2+</sup>',
+        display_text='Ca2+',
         name='ca'
     )
 
     mg_input = TextInput(
-        display_text='Mg<sup>2+</sup>',
+        display_text='Mg2+',
         name='mg'
     )
 
     na_input = TextInput(
-        display_text='Na<sup>+</sup>',
+        display_text='Na+',
         name='na'
     )
 
     k_input = TextInput(
-        display_text='K<sup>+</sup>',
+        display_text='K+',
         name='k'
     )
 
     hco_input = TextInput(
-        display_text='HCO<sub>3<sup>-</sup>',
+        display_text='HCO3-',
         name='hco'
     )
 
     cl_input = TextInput(
-        display_text='Cl<sup>-</sup>',
+        display_text='Cl-',
         name='cl'
     )
 
     so_input = TextInput(
-        display_text='SO<sub>4</sub><sup>2-</sup>',
+        display_text='SO42-',
         name='so'
     )
 
     sio_input = TextInput(
-        display_text='SiO<sub>2</sub>',
+        display_text='SiO2',
         name='sio'
     )
 
