@@ -4,6 +4,7 @@ from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
 from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVView, MapView, MVLayer, RangeSlider
 from tethys_sdk.workspaces import app_workspace
+from .model import add_new_data
 
 @login_required()
 def home(request):
@@ -99,6 +100,7 @@ def Data(request):
     return render(request,'waimea_flux/Data.html',context)
 
 
+@app_workspace
 @login_required()
 def New_Data(request):
     """
@@ -158,6 +160,7 @@ def New_Data(request):
 
         if not has_errors:
             #Do Stuff here
+            add_new_data(db_directory=app_workspace.path, sampleid=sampleid, datecol=datecol, timecol=tiemcol, note=note, pH=pH, temper=temper, cond=cond, ca=ca, mg=mg, na=na, k=k, hco=hco, cl=cl, so=so, sio=sio)
             return redirect(reverse('waimea_flux:home'))
 
         messages.error(request, "Please fix errors.")
