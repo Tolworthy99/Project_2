@@ -66,6 +66,6 @@ def get_all_water(db_directory):
         water_json_path = os.path.join(water_dir, water_json)
         with open(water_json_path, 'r') as f:
             water_dict = json.loads(f.readlines()[0])
-            water.append(water_dict)
+            waters.append(water_dict)
 
     return waters
