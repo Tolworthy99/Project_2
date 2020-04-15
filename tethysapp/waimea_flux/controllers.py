@@ -104,11 +104,71 @@ def New_Data(request):
     """
     Controller for New Data page.
     """
+    # Default Values
+    sampleid = ''
+    river = ''
+    datecol = ''
+    timecol = ''
+    note = ''
+    pH = ''
+    temper = ''
+    cond = ''
+    ca = ''
+    mg = ''
+    na = ''
+    k = ''
+    hco = ''
+    cl = ''
+    so = ''
+    sio = ''
+
+    # Errors
+    sampleid_error = ''
+    datecol_error = ''
+
+    # Handle form submission
+    if request.POST and 'add-button' in request.POST:
+        # Get values
+        has_errors = False
+        sampleid = request.POST.get('sampleid',None)
+        river = request.POST.get('river',None)
+        datecol = request.POST.get('datecol',None)
+        timecol = request.POST.get('timecol',None)
+        note = request.POST.get('note',None)
+        pH = request.POST.get('pH',None)
+        temper = request.POST.get('temper',None)
+        cond = request.POST.get('cond',None)
+        ca = request.POST.get('ca',None)
+        mg = request.POST.get('mg',None)
+        na = request.POST.get('na',None)
+        k = request.POST.get('k',None)
+        hco = request.POST.get('hco',None)
+        cl = request.POST.get('cl',None)
+        so = request.POST.get('so',None)
+        sio = request.POST.get('sio',None)
+
+        #validate
+        if not sampleid:
+            has_error = True
+            sampleid_error = 'Sample ID is required'
+
+        if not datecol:
+            has_error = True
+            datecol_error = 'Date Collected is Required'
+
+        if not has_errors:
+            #Do Stuff here
+            return redirect(reverse('waimea_flux:home'))
+
+        messages.error(request, "Please fix errors.")
+
 
     # Define form gizmos
     sampleid_input = TextInput(
         display_text='Sample ID',
-        name='sampleid'
+        name='sampleid',
+        initial=sampleid,
+        error=sampleid_error
     )
 
     river_input = TextInput(
@@ -124,7 +184,9 @@ def New_Data(request):
         format='MM d, yyyy',
         start_view='decade',
         today_button=True,
-        initial='February 15, 2017'
+        initial=datecol,
+        error=datecol_error
+
     )
 
     timecol_input = TextInput(
