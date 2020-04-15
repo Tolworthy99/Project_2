@@ -55,7 +55,7 @@ def get_all_water(db_directory):
     if not os.path.exists(water_dir):
         os.mkdir(water_dir)
 
-    water = []
+    waters = []
 
     # Open each file and convert contents to python objects
     for water_json in os.listdir(water_dir):
@@ -68,4 +68,4 @@ def get_all_water(db_directory):
             water_dict = json.loads(f.readlines()[0])
             water.append(water_dict)
 
-    return water
+    return waters
