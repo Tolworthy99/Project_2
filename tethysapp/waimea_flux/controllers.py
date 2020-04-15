@@ -4,7 +4,7 @@ from tethys_sdk.permissions import login_required
 from tethys_sdk.gizmos import Button
 from tethys_sdk.gizmos import TextInput, DatePicker, SelectInput, DataTableView, MVDraw, MVView, MapView, MVLayer, RangeSlider
 from tethys_sdk.workspaces import app_workspace
-from .model import add_new_data
+from .model import add_new_data, get_all_water
 
 @login_required()
 def home(request):
@@ -88,14 +88,34 @@ def About(request):
 
     return render(request,'waimea_flux/About.html',context)
 
-
+@app_workspace
 @login_required()
-def Data(request):
+def Data(request, app_workspace):
     """
     Controller for the background page.
     """
+    waters = get_all_water(app_workspace.path)
+    table_rows = []
 
-    context = {}
+    for water in waters
+        table_rows.append(
+            (
+                water['sampleid'],water['river'], water['datecol'], water['timecol'],water['note'], water['pH'], water['temper'], water['cond'],
+                water['ca'],water['mg'],water['na'],water['k'],water['hco'],water['cl'],water['so'],water['sio']
+            )
+        )
+
+    water_table = DataTableView(
+        column_names=('Sample ID', 'River', 'Date Collected', 'Time Collected', 'Notes', 'pH', 'Temperature (C)', 'Conductivity', 'Ca2+ (mg/L)', 'Mg2+ (mg/L)', 'Na+ (mg/L)', 'K+ (mg/L)','HCO3- (mg/L)', 'Cl- (mg/L)', 'SO42- (mg/L)', 'SiO2 (mg/L)'),
+        rows=table_rows,
+        searching=False,
+        orderClasses=False,
+        lengthMenu=[ [10,25,50,-1], [10,25.50."All"]],
+    )
+
+    context = {
+        'water_table':water_table
+    }
 
     return render(request,'waimea_flux/Data.html',context)
 

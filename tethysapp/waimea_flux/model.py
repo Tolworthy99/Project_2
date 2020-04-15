@@ -44,3 +44,28 @@ def add_new_data(db_directory, sampleid, river, datecol, timecol, note, pH, temp
     # Write json
     with open(file_path, 'w') as f:
         f.write(water_json)
+
+def get_all_water(db_directory):
+    """
+    Get all persisted dams.
+    """
+    # Write to file in {{db_directory}}/dams/{{uuid}}.json
+    # Make dams dir if it doesn't exist
+    water_dir = os.path.join(db_directory, 'water')
+    if not os.path.exists(water_dir):
+        os.mkdir(water_dir)
+
+    water = []
+
+    # Open each file and convert contents to python objects
+    for water_json in os.listdir(water_dir):
+        # Make sure we are only looking at json files
+        if '.json' not in water_json:
+            continue
+
+        water_json_path = os.path.join(water_dir, water_json)
+        with open(water_json_path, 'r') as f:
+            water_dict = json.loads(f.readlines()[0])
+            water.append(water_dict)
+
+    return water
