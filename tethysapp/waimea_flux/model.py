@@ -51,7 +51,7 @@ def get_all_water(db_directory):
     """
     # Write to file in {{db_directory}}/dams/{{uuid}}.json
     # Make dams dir if it doesn't exist
-    water_dir = os.path.join(db_directory, 'water')
+    water_dir = os.path.join(db_directory, 'Water_Data')
     if not os.path.exists(water_dir):
         os.mkdir(water_dir)
 
