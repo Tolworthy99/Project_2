@@ -97,7 +97,7 @@ def Data(request, app_workspace):
     waters = get_all_water(app_workspace.path)
     table_rows = []
 
-    for water in waters
+    for water in waters:
         table_rows.append(
             (
                 water['sampleid'],water['river'], water['datecol'], water['timecol'],water['note'], water['pH'], water['temper'], water['cond'],
@@ -110,7 +110,7 @@ def Data(request, app_workspace):
         rows=table_rows,
         searching=False,
         orderClasses=False,
-        lengthMenu=[ [10,25,50,-1], [10,25.50."All"]],
+        lengthMenu=[ [10,25,50,-1], [10,25,50,"All"]],
     )
 
     context = {
@@ -180,7 +180,7 @@ def New_Data(request, app_workspace):
 
         if not has_errors:
             #Do Stuff here
-            add_new_data(db_directory=app_workspace.path, sampleid=sampleid, datecol=datecol, timecol=tiemcol, note=note, pH=pH, temper=temper, cond=cond, ca=ca, mg=mg, na=na, k=k, hco=hco, cl=cl, so=so, sio=sio)
+            add_new_data(db_directory=app_workspace.path, sampleid=sampleid, river=river, datecol=datecol, timecol=timecol, note=note, pH=pH, temper=temper, cond=cond, ca=ca, mg=mg, na=na, k=k, hco=hco, cl=cl, so=so, sio=sio)
             return redirect(reverse('waimea_flux:home'))
 
         messages.error(request, "Please fix errors.")
@@ -283,7 +283,7 @@ def New_Data(request, app_workspace):
         name='add-button',
         icon='glyphicon glyphicon-plus',
         style='success',
-        attributes={'form': 'add-dam-form'},
+        attributes={'form': 'add-sample-form'},
         submit=True
     )
 
