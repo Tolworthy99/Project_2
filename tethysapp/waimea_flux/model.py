@@ -3,7 +3,7 @@ import uuid
 import json
 
 
-def add_new_data(db_directory, sampleid, river, datecol, timecol, note, pH, temper, cond, ca, mg, na, k, hco, cl, so, sio):
+def add_new_data(db_directory, location, sampleid, river, datecol, timecol, note, pH, temper, cond, ca, mg, na, k, hco, cl, so, sio):
     """
     Persist new dam.
     """
@@ -11,6 +11,7 @@ def add_new_data(db_directory, sampleid, river, datecol, timecol, note, pH, temp
     new_water_id = uuid.uuid4()
     water_dict = {
         'id': str(new_water_id),
+        'location': location_dict['geometries'][0],
         'sampleid': sampleid,
         'river': river,
         'datecol': datecol,

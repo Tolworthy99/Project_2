@@ -143,10 +143,12 @@ def New_Data(request, app_workspace):
     cl = ''
     so = ''
     sio = ''
+    loaction = ''
 
     # Errors
     sampleid_error = ''
     datecol_error = ''
+    location_error = ''
 
     # Handle form submission
     if request.POST and 'add-button' in request.POST:
@@ -168,19 +170,24 @@ def New_Data(request, app_workspace):
         cl = request.POST.get('cl',None)
         so = request.POST.get('so',None)
         sio = request.POST.get('sio',None)
+        location = request.POST.get('geometry',None)
 
         #validate
         if not sampleid:
-            has_error = True
+            has_errors = True
             sampleid_error = 'Sample ID is required'
 
         if not datecol:
-            has_error = True
+            has_errors = True
             datecol_error = 'Date Collected is Required'
+
+        if not location:
+            has_errors = True
+            location_error = 'Location is required'
 
         if not has_errors:
             #Do Stuff here
-            add_new_data(db_directory=app_workspace.path, sampleid=sampleid, river=river, datecol=datecol, timecol=timecol, note=note, pH=pH, temper=temper, cond=cond, ca=ca, mg=mg, na=na, k=k, hco=hco, cl=cl, so=so, sio=sio)
+            add_new_data(db_directory=app_workspace.path, location=location, sampleid=sampleid, river=river, datecol=datecol, timecol=timecol, note=note, pH=pH, temper=temper, cond=cond, ca=ca, mg=mg, na=na, k=k, hco=hco, cl=cl, so=so, sio=sio)
             return redirect(reverse('waimea_flux:home'))
 
         messages.error(request, "Please fix errors.")
@@ -277,6 +284,28 @@ def New_Data(request, app_workspace):
         name='sio'
     )
 
+    initial_view = MVView(
+        projection = 'EPSG:4326',
+        center = [-159.5,22.07],
+        zoom=6
+
+    )
+
+    drawing_options = MVDraw(
+        controls=['Modify','Delete','Move','Point'],
+        initial = 'Point',
+        output_format = 'GeoJSON',
+        point_color = '#FF0000'
+
+    )
+
+    location_input = MapView(
+        height='300px',
+        width='100%',
+        basemap='OpenStreetMap',
+        draw=drawing_options,
+        view=initial_view
+    )
 
     add_button = Button(
         display_text='Add',
@@ -310,6 +339,8 @@ def New_Data(request, app_workspace):
         'cl_input': cl_input,
         'so_input': so_input,
         'sio_input': sio_input,
+        'location_input':location_input,
+        'location_error':location_error,
         'add_button': add_button,
         'cancel_button': cancel_button,
     }
