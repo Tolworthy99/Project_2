@@ -7,6 +7,10 @@ def add_new_data(db_directory, location, sampleid, river, datecol, timecol, note
     """
     Persist new dam.
     """
+
+    #convert GeoJSON to python dictionary
+    location_dict = json.loads(location)
+
     # Serialize data to json
     new_water_id = uuid.uuid4()
     water_dict = {

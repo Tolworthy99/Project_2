@@ -385,7 +385,7 @@ def Datamap(request, app_workspace):
         water_feature = {
             'type': 'Feature',
             'geometry': {
-                'type': water_dir_location['type'],
+                'type': water_location['type'],
                 'coordinates': water_location['coordinates'],
             }
         }
@@ -429,17 +429,17 @@ def Datamap(request, app_workspace):
     try:
         view_center = [sum(lng_list) / float(len(lng_list)), sum(lat_list) / float(len(lat_list))]
     except ZeroDivisionError:
-        view_center = [-98.6, 39.8]
+        view_center = [-159.5,22.07]
 
     view_options = MVView(
         projection='EPSG:4326',
         center=view_center,
-        zoom=4.5,
+        zoom=11,
         maxZoom=18,
         minZoom=2
     )
 
-    dam_inventory_map = MapView(
+    water_sample_map = MapView(
         height='100%',
         width='100%',
         layers=[water_layer],
@@ -452,13 +452,13 @@ def Datamap(request, app_workspace):
         name='add-sample-button',
         icon='glyphicon glyphicon-plus',
         style='success',
-        href=reverse('dam_inventory:add_dam')
+        href=reverse('waimea_flux:New_Data')
     )
 
     context = {
-        'dam_sample_map': dam_sample_map,
+        'water_sample_map': water_sample_map,
         'add_sample_button': add_sample_button
     }
 
-    
+
     return render(request,'waimea_flux/Datamap.html',context)
