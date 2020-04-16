@@ -287,7 +287,7 @@ def New_Data(request, app_workspace):
     initial_view = MVView(
         projection = 'EPSG:4326',
         center = [-159.5,22.07],
-        zoom=6
+        zoom=10
 
     )
 
