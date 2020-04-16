@@ -365,11 +365,100 @@ def Othermap(request):
 
     return render(request,'waimea_flux/Othermap.html',context)
 
+@app_workspace
 @login_required()
-def Datamap(request):
+def Datamap(request, app_workspace):
     """
     Controller for the background page.
     """
-    context = {}
+    waters = get_all_water(app_workspace.path)
+    features = []
+    lat_list = []
+    lng_list = []
 
+    # Define GeoJSON Features
+    for water in waters:
+        water_location = water.pop('location')
+        lat_list.append(water_location['coordinates'][1])
+        lng_list.append(water_location['coordinates'][0])
+
+        water_feature = {
+            'type': 'Feature',
+            'geometry': {
+                'type': water_dir_location['type'],
+                'coordinates': water_location['coordinates'],
+            }
+        }
+
+        features.append(water_feature)
+
+    # Define GeoJSON FeatureCollection
+    water_feature_collection = {
+        'type': 'FeatureCollection',
+        'crs': {
+            'type': 'name',
+            'properties': {
+                'name': 'EPSG:4326'
+            }
+        },
+        'features': features
+    }
+
+    style = {'ol.style.Style': {
+        'image': {'ol.style.Circle': {
+            'radius': 10,
+            'fill': {'ol.style.Fill': {
+                'color':  '#d84e1f'
+            }},
+            'stroke': {'ol.style.Stroke': {
+                'color': '#ffffff',
+                'width': 1
+            }}
+        }}
+    }}
+
+    # Create a Map View Layer
+    water_layer = MVLayer(
+        source='GeoJSON',
+        options=water_feature_collection,
+        legend_title='Water Samples',
+        layer_options={'style': style}
+    )
+
+    # Define view centered on dam locations
+    try:
+        view_center = [sum(lng_list) / float(len(lng_list)), sum(lat_list) / float(len(lat_list))]
+    except ZeroDivisionError:
+        view_center = [-98.6, 39.8]
+
+    view_options = MVView(
+        projection='EPSG:4326',
+        center=view_center,
+        zoom=4.5,
+        maxZoom=18,
+        minZoom=2
+    )
+
+    dam_inventory_map = MapView(
+        height='100%',
+        width='100%',
+        layers=[water_layer],
+        basemap='OpenStreetMap',
+        view=view_options
+    )
+
+    add_sample_button = Button(
+        display_text='Add Dam',
+        name='add-sample-button',
+        icon='glyphicon glyphicon-plus',
+        style='success',
+        href=reverse('dam_inventory:add_dam')
+    )
+
+    context = {
+        'dam_sample_map': dam_sample_map,
+        'add_sample_button': add_sample_button
+    }
+
+    
     return render(request,'waimea_flux/Datamap.html',context)
