@@ -9,6 +9,75 @@
 
 {% block app_content %}
   <h1>FAQ</h1>
+  <style media="screen">
+
+    .collapsible {
+      background-color: rgba(153, 31, 3, 1);
+      color: black;
+      cursor: pointer;
+      padding: 18px;
+      width: 100%;
+      border: none;
+      text-align: left;
+      outline: none;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+
+    .active, .collapsible:hover {
+      background-color: rgba(153, 31, 3, 0.5);
+    }
+
+
+    .content {
+      padding: 0 18px;
+      display: none;
+      overflow: hidden;
+      background-color: rgba(255, 0, 0, 0.5);
+      margin-bottom: 10px;
+    }
+  </style>
+
+
+  <h1>Frequently Asked Questions</h1>
+  <button type="button" class="collapsible">What are the sources of Data?</button>
+    <div class="content">
+      <p>The Rainfall and AET data are from the Rainfall Atlas of Hawaii. The DEM and Geology is from the USGS.</p>
+    </div>
+  <button type="button" class="collapsible">What sections of the form are required?</button>
+    <div class="content">
+      <p>Only the Sample ID, the location and the date is required. </p>
+    </div>
+  <button type="button" class="collapsible">Why are there not more options of data input?</button>
+    <div class="content">
+      <p>I chose the more common and prevalent anions and cation for the island. This way the form is not to long but gives a good understanding of the water chemistry in the islands streams.</p>
+    </div>
+  <button type="button" class="collapsible">What do I right in the notes?</button>
+    <div class="content">
+      <p>Any field notes you had when collecting the water. For example it was raining at the time or the water was standing.</p>
+    </div>
+
+
+
+
+
+<script type="text/javascript">
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+</script>
 
 {% endblock %}
 
