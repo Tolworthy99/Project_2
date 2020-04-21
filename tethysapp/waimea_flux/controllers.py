@@ -235,52 +235,52 @@ def New_Data(request, app_workspace):
     )
 
     temper_input = TextInput(
-        display_text='Temperature',
+        display_text='Temperature (C)',
         name='temper'
     )
 
     cond_input = TextInput(
-        display_text='Conductivity',
+        display_text='Conductivity (microsiemens/cm)',
         name='cond'
     )
 
     ca_input = TextInput(
-        display_text='Ca2+',
+        display_text='Ca2+ (mg/L)',
         name='ca'
     )
 
     mg_input = TextInput(
-        display_text='Mg2+',
+        display_text='Mg2+ (mg/L)',
         name='mg'
     )
 
     na_input = TextInput(
-        display_text='Na+',
+        display_text='Na+ (mg/L)',
         name='na'
     )
 
     k_input = TextInput(
-        display_text='K+',
+        display_text='K+ (mg/L)',
         name='k'
     )
 
     hco_input = TextInput(
-        display_text='HCO3-',
+        display_text='HCO3- (mg/L)',
         name='hco'
     )
 
     cl_input = TextInput(
-        display_text='Cl-',
+        display_text='Cl- (mg/L)',
         name='cl'
     )
 
     so_input = TextInput(
-        display_text='SO42-',
+        display_text='SO42- (mg/L)',
         name='so'
     )
 
     sio_input = TextInput(
-        display_text='SiO2',
+        display_text='SiO2 (mg/L)',
         name='sio'
     )
 
