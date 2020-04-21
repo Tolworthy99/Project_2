@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block app_content %}
+<style media="screen">
+  img{
+    float:right;
+  }
+</style>
 <h1>About the App</h1>
 
 <p>Welcome the Kauai Water Data app. This app is a place to store water data for the island of Kauai focusing around Waimea Canyon. For my Thesis I was answering the question why Waimea Canyon has such a distinct shape from the other canyons on the islands.</p>
@@ -21,7 +26,8 @@
 
 <p>There are two other maps on the app. The is a geologic map of the island and a map showing the Waimea Watershed and the DEM of the island.</p>
 
-<img src="{% static 'waimea_flux/images/Waimea_Canyon.jpeg'%}" alt="" height=300px>
+<img src="{% static 'waimea_flux/images/Waimea_Canyon.jpeg'%}" alt="" height=300px >
+
 
 
 {% endblock %}
