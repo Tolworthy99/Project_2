@@ -24,12 +24,12 @@
 
   <li class="title">App Navigation</li>
   <li class="{% if request.path == home_url %}active{% endif %}"><a href="{{home_url}}">Home</a></li>
-  <li class="{% if request.path == Data_url %}active{% endif %}"><a href="{{Data_url}}">Table of Samples</a></li>
   <li class="{% if request.path == New_Data_url %}active{% endif %}"><a href="{{New_Data_url}}">Input New Samples</a></li>
+  <li class="{% if request.path == Data_url %}active{% endif %}"><a href="{{Data_url}}">Table of Samples</a></li>
+  <li class="{% if request.path == Datamap_url %}active{% endif %}"><a href="{{Datamap_url}}">Map of Water Data locations</a></li>
   <li class="{% if request.path == Gmap_url %}active{% endif %}"><a href="{{Gmap_url}}">Geologic Map of Kauai</a></li>
   <li class="{% if request.path == other_url %}active{% endif %}"><a href="{{other_url}}">Map of Kauai with Data</a></li>
-  <li class="{% if request.path == Datamap_url %}active{% endif %}"><a href="{{Datamap_url}}">Map of Water Data locations</a></li>
-  <li class="{% if request.path == About_url %}active{% endif %}"><a href="{{About_url}}">Help Page</a></li>
+  <li class="{% if request.path == About_url %}active{% endif %}"><a href="{{About_url}}">FAQ</a></li>
 {% endblock %}
 
 {% block app_content %}

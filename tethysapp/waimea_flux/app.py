@@ -11,7 +11,7 @@ class WaimeaFlux(TethysAppBase):
     icon = 'waimea_flux/images/Waimea_Canyon.jpeg'
     package = 'waimea_flux'
     root_url = 'waimea-flux'
-    color = '#8e44ad'
+    color = '#3e3242'
     description = 'An app holding water and soil data for the island of Kauai, Hawaii, US'
     tags = ''
     enable_feedback = False
