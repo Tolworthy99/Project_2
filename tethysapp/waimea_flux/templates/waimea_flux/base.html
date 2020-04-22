@@ -21,7 +21,6 @@
 {% url 'waimea_flux:Othermap' as other_url %}
 {% url 'waimea_flux:Datamap' as Datamap_url %}
 
-
   <li class="title">App Navigation</li>
   <li class="{% if request.path == home_url %}active{% endif %}"><a href="{{home_url}}">Home</a></li>
   <li class="{% if request.path == New_Data_url %}active{% endif %}"><a href="{{New_Data_url}}">Input New Samples</a></li>

@@ -73,6 +73,12 @@
           layers: 'WaimeaWatershed',
           format: 'image/png',
           transparent: true,
+        }),
+
+          'Isohyets': L.tileLayer.wms('https://geoserver.hydroshare.org/geoserver/HS-c494b4543c6f4b7fbd42c7e79467fcd5/wms',{
+          layers: 'isohyet_mm_Ann_kauai',
+          format: 'image/png',
+          transparent: true,
         })
         }
 
